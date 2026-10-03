@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Activity 2 - While Loop and Array</title>
+</head>
+<body>
+
+    <h1>While Loop - Array Activity</h1>
+
+    <label>Enter an item:</label>
+    <input type="text" id="itemInput">
+
+    <button id="addButton" onclick="addItem()">Add Item</button>
+    <button id="stopButton" onclick="stopProgram()">Stop</button>
+
+    <h3>Items:</h3>
+    <div id="itemsList"></div>
+
+    <p id="totalItems">Total Items: 0</p>
+
+    <p id="programStatus">Program is running...</p>
+
+    <script>
+        let items = [];
+
+        let isRunning = true;
+
+        function addItem() {
+            if (isRunning === false) {
+                return;
+            }
+
+            let input = document.getElementById("itemInput");
+            let value = input.value.trim();
+
+            if (value === "") {
+                alert("Please enter an item.");
+                return;
+            }
+
+            items.push(value);
+
+            displayItems();
+
+            input.value = "";
+        }
+
+        function displayItems() {
+            let output = document.getElementById("itemsList");
+
+            output.innerHTML = "";
+
+            let i = 0;
+
+            while (i < items.length) {
+                output.innerHTML += (i + 1) + ". " + items[i] + "<br>";
+                i++;
+            }
+
+            document.getElementById("totalItems").textContent =
+                "Total Items: " + items.length;
+        }
+
+        function stopProgram() {
+            isRunning = false;
+
+            document.getElementById("itemInput").disabled = true;
+            document.getElementById("addButton").disabled = true;
+            document.getElementById("stopButton").disabled = true;
+
+            document.getElementById("programStatus").textContent =
+                "Program stopped. You can no longer add items.";
+        }
+
+        displayItems();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Enrollment System</title>
+</head>
+<body>
+
+    <h1>Student Enrollment System</h1>
+
+    <form>
+        <label for="studentName">Student Name:</label>
+        <input type="text" id="studentName">
+
+        <br><br>
+
+        <label for="subject">Select Subject:</label>
+        <select id="subject">
+            <option value="Database">Database</option>
+            <option value="Networking">Networking</option>
+            <option value="Web Development">Web Development</option>
+            <option value="JavaScript">JavaScript</option>
+        </select>
+
+        <br><br>
+
+        <button type="button" onclick="enrollStudent()">Enroll Student</button>
+        <button type="button" onclick="showStudents()">Show Students</button>
+        <button type="button" onclick="clearEnrollments()">Clear</button>
+    </form>
+
+    <h2>Enrollment Status:</h2>
+    <p id="status">No enrollment activity yet.</p>
+
+    <h2>Students Enrolled in Selected Subject:</h2>
+    <h3 id="selectedSubject">Database</h3>
+    <div id="studentList">No students enrolled in Database.</div>
+
+    <script>
+        const students = new Set();
+
+        const enrollments = {
+            Database: [],
+            Networking: [],
+            "Web Development": [],
+            JavaScript: []
+        };
+
+        function enrollStudent() {
+            const nameInput = document.getElementById("studentName");
+            const subjectInput = document.getElementById("subject");
+
+            const name = nameInput.value.trim();
+            const subject = subjectInput.value;
+
+            if (name === "") {
+                document.getElementById("status").textContent =
+                    "Please enter a student name.";
+            } else {
+                const studentKey = name.toLowerCase();
+
+                if (students.has(studentKey)) {
+                    let enrolledSubject = "";
+                    let found = false;
+
+                    const subjects = Object.keys(enrollments);
+                    let i = 0;
+
+                    while (i < subjects.length) {
+                        const currentSubject = subjects[i];
+                        const subjectStudents = enrollments[currentSubject];
+
+                        let j = 0;
+
+                        while (j < subjectStudents.length) {
+                            if (subjectStudents[j].toLowerCase() === studentKey) {
+                                enrolledSubject = currentSubject;
+                                found = true;
+                                break;
+                            }
+
+                            j++;
+                        }
+
+                        if (found) {
+                            break;
+                        }
+
+                        i++;
+                    }
+
+                    document.getElementById("status").textContent =
+                        name + " is already enrolled in " + enrolledSubject + ".";
+                } else {
+                    enrollments[subject].push(name);
+                    students.add(studentKey);
+
+                    document.getElementById("status").textContent =
+                        name + " successfully enrolled in " + subject + ".";
+                }
+            }
+
+            showStudents();
+        }
+
+        function showStudents() {
+            const subject = document.getElementById("subject").value;
+            const list = document.getElementById("studentList");
+            const subjectTitle = document.getElementById("selectedSubject");
+
+            subjectTitle.textContent = subject;
+
+            const subjectStudents = enrollments[subject];
+
+            if (subjectStudents.length === 0) {
+                list.textContent = "No students enrolled in " + subject + ".";
+            } else {
+                let output = "";
+                let i = 0;
+
+                while (i < subjectStudents.length) {
+                    output += (i + 1) + ". " + subjectStudents[i];
+
+                    if (i < subjectStudents.length - 1) {
+                        output += "<br>";
+                    }
+
+                    i++;
+                }
+
+                list.innerHTML = output;
+            }
+        }
+
+        function clearEnrollments() {
+            students.clear();
+
+            enrollments.Database = [];
+            enrollments.Networking = [];
+            enrollments["Web Development"] = [];
+            enrollments.JavaScript = [];
+
+            document.getElementById("studentName").value = "";
+
+            document.getElementById("status").textContent =
+                "All enrollment records have been cleared.";
+
+            showStudents();
+        }
+
+        document.getElementById("subject").addEventListener("change", function () {
+            showStudents();
+        });
+
+        showStudents();
+    </script>
+
+</body>
+</html>

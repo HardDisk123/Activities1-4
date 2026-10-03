@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Quiz Game</title>
+</head>
+<body>
+
+    <h1>JavaScript Quiz Game</h1>
+
+    <div id="quizArea">
+
+        <p id="question"></p>
+
+        <div id="choices"></div>
+
+        <p id="result"></p>
+
+        <p id="score">Score: 0</p>
+
+        <button id="nextButton" onclick="nextQuestion()">Next Question</button>
+
+    </div>
+
+    <div id="finishedArea" style="display: none;">
+
+        <p>Quiz Finished!</p>
+
+        <p id="finalScore"></p>
+
+        <p id="finalScoreDisplay">Score: 0</p>
+
+        <button onclick="restartQuiz()">Restart Quiz</button>
+
+    </div>
+
+    <script>
+        const quizQuestions = [
+            {
+                question: "What is the correct way to declare a variable in JavaScript?",
+                choices: [
+                    "var x",
+                    "variable x",
+                    "declare x",
+                    "int x"
+                ],
+                answer: "var x"
+            },
+            {
+                question: "Which symbol is used for addition?",
+                choices: [
+                    "+",
+                    "-",
+                    "*",
+                    "/"
+                ],
+                answer: "+"
+            },
+            {
+                question: "Which event happens when a button is clicked?",
+                choices: [
+                    "onclick",
+                    "onhover",
+                    "onload",
+                    "onchange"
+                ],
+                answer: "onclick"
+            },
+            {
+                question: "Which JavaScript structure stores multiple values?",
+                choices: [
+                    "Array",
+                    "Variable",
+                    "Function",
+                    "Statement"
+                ],
+                answer: "Array"
+            },
+            {
+                question: "Which statement is used for decision making?",
+                choices: [
+                    "if",
+                    "for",
+                    "function",
+                    "return"
+                ],
+                answer: "if"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        displayQuestion();
+
+        function displayQuestion() {
+
+            let current = quizQuestions[currentQuestion];
+
+            document.getElementById("question").textContent = current.question;
+
+            document.getElementById("choices").innerHTML = "";
+
+            document.getElementById("result").textContent = "";
+
+            current.choices.forEach(function(choice) {
+
+                let button = document.createElement("button");
+
+                button.textContent = choice;
+
+                button.onclick = function() {
+                    checkAnswer(choice, button);
+                };
+
+                document.getElementById("choices").appendChild(button);
+
+                document.getElementById("choices").appendChild(
+                    document.createTextNode(" ")
+                );
+
+            });
+
+            document.getElementById("score").textContent =
+                "Score: " + score;
+
+            if (currentQuestion === quizQuestions.length - 1) {
+                document.getElementById("nextButton").textContent =
+                    "End Quiz";
+            } else {
+                document.getElementById("nextButton").textContent =
+                    "Next Question";
+            }
+        }
+
+        function checkAnswer(selectedAnswer, selectedButton) {
+
+            let current = quizQuestions[currentQuestion];
+
+            if (selectedAnswer === current.answer) {
+
+                document.getElementById("result").textContent =
+                    "Correct!";
+
+                score++;
+
+            } else {
+
+                document.getElementById("result").textContent =
+                    "Incorrect! The correct answer is: " + current.answer;
+
+            }
+            let answerButtons =
+                document.getElementById("choices").getElementsByTagName("button");
+
+            for (let i = 0; i < answerButtons.length; i++) {
+                answerButtons[i].disabled = true;
+            }
+            document.getElementById("score").textContent =
+                "Score: " + score;
+        }
+
+        function nextQuestion() {
+
+            currentQuestion++;
+
+            if (currentQuestion < quizQuestions.length) {
+
+                displayQuestion();
+
+            } else {
+
+                endQuiz();
+
+            }
+        }
+
+        function endQuiz() {
+
+            document.getElementById("quizArea").style.display = "none";
+
+            document.getElementById("finishedArea").style.display = "block";
+
+            document.getElementById("finalScore").textContent =
+                "Your final score is " + score + " out of " + quizQuestions.length;
+
+            document.getElementById("finalScoreDisplay").textContent =
+                "Score: " + score;
+        }
+
+        function restartQuiz() {
+
+            currentQuestion = 0;
+
+            score = 0;
+
+            document.getElementById("quizArea").style.display = "block";
+
+            document.getElementById("finishedArea").style.display = "none";
+
+            displayQuestion();
+        }
+
+    </script>
+
+</body>
+</html>

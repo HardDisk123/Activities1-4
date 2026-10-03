@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Activity 1 - Set and Array</title>
+</head>
+<body>
+
+    <h1>Set and Array Activity</h1>
+
+    <h2>Set</h2>
+
+    <label>Enter an item:</label>
+    <input type="text" id="setInput">
+
+    <button onclick="addToSet()">Add to Set</button>
+    <button onclick="removeFromSet()">Remove</button>
+    <button onclick="clearSet()">Clear Set</button>
+
+    <h3>Items in Set:</h3>
+    <div id="setItems"></div>
+
+    <p id="setSize">Set Size: 0</p>
+
+    <hr>
+
+    <h2>Array</h2>
+
+    <label>Enter an item:</label>
+    <input type="text" id="arrayInput">
+
+    <button onclick="addToArray()">Add to Array</button>
+    <button onclick="removeFromArray()">Remove</button>
+    <button onclick="clearArray()">Clear Array</button>
+
+    <h3>Items in Array:</h3>
+    <div id="arrayItems"></div>
+
+    <p id="arrayLength">Array Length: 0</p>
+
+    <script>
+       
+        let itemSet = new Set();
+        let itemArray = [];
+
+        function addToSet() {
+            let input = document.getElementById("setInput");
+            let value = input.value.trim();
+
+            if (value === "") {
+                alert("Please enter an item.");
+                return;
+            }
+
+            itemSet.add(value);
+
+            displaySet();
+
+            input.value = "";
+        }
+
+        function removeFromSet() {
+            let input = document.getElementById("setInput");
+            let value = input.value.trim();
+
+            if (value === "") {
+                alert("Please enter the item to remove.");
+                return;
+            }
+
+            itemSet.delete(value);
+
+            displaySet();
+
+            input.value = "";
+        }
+
+        function clearSet() {
+            itemSet.clear();
+
+            displaySet();
+
+            document.getElementById("setInput").value = "";
+        }
+
+        function displaySet() {
+            let output = document.getElementById("setItems");
+            output.innerHTML = "";
+
+            if (itemSet.size === 0) {
+                output.innerHTML = "No items in Set.";
+            } else {
+                itemSet.forEach(function(item) {
+                    output.innerHTML += item + "<br>";
+                });
+            }
+
+            document.getElementById("setSize").textContent =
+                "Set Size: " + itemSet.size;
+        }
+
+        function addToArray() {
+            let input = document.getElementById("arrayInput");
+            let value = input.value.trim();
+
+            if (value === "") {
+                alert("Please enter an item.");
+                return;
+            }
+
+            itemArray.push(value);
+
+            displayArray();
+
+            input.value = "";
+        }
+
+        function removeFromArray() {
+            let input = document.getElementById("arrayInput");
+            let value = input.value.trim();
+
+            if (value === "") {
+                alert("Please enter the item to remove.");
+                return;
+            }
+
+            let index = itemArray.indexOf(value);
+
+            if (index !== -1) {
+                itemArray.splice(index, 1);
+            }
+
+            displayArray();
+
+            input.value = "";
+        }
+
+        function clearArray() {
+            itemArray.length = 0;
+
+            displayArray();
+
+            document.getElementById("arrayInput").value = "";
+        }
+
+        function displayArray() {
+            let output = document.getElementById("arrayItems");
+            output.innerHTML = "";
+
+            if (itemArray.length === 0) {
+                output.innerHTML = "No items in Array.";
+            } else {
+                for (let i = 0; i < itemArray.length; i++) {
+                    output.innerHTML += (i + 1) + ". " + itemArray[i] + "<br>";
+                }
+            }
+
+            document.getElementById("arrayLength").textContent =
+                "Array Length: " + itemArray.length;
+        }
+
+        displaySet();
+        displayArray();
+    </script>
+
+</body>
+</html>
